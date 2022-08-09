@@ -1,0 +1,177 @@
+ANKARA ROUTER 
+
+Enable 
+Configure terminal 
+İnterface FastEthernet0/0
+ip address 192.168.3.1 255.255.255.0
+no shutdown
+interface Serial0/0/0
+ip address 11.0.0.2 255.255.255.252
+no shutdown
+
+router ospf 1
+network 192.168.3.0 0.0.0.255 area 0
+network 11.0.0.0 0.0.0.3 area 0
+Enable
+Configure terminal 
+interface s0/0/0
+ip ospf authentication message-digest
+ip ospf message-digest-key 1 md5 cisco
+
+
+
+ANKARA SWITCH
+
+Enable
+Configure terminal 
+interface range fa0/3-24
+shutdown
+interface range g0/1-2
+interface fa0/2
+shutdown
+interface fa0/2
+switchport mode access
+switchport port-security max 1
+switchport port-security violation restrict
+switchport port-security mac-address 0002.4A32.CA70
+
+-----------
+
+ISTANBUL ROUTER 
+
+Enable 
+Configure terminal 
+interface Serial0/0/0
+clock rate 2000000
+ip address 11.0.0.1 255.255.255.252
+no shutdown
+exit
+ipv6 unicast-routing
+interface Serial0/0/1
+clock rate 2000000
+ipv6 address 1ef0:abc:bc:c::1/126
+no shutdown
+exit 
+interface FastEthernet0/0      
+no ip address
+no shutdown
+interface FastEthernet0/0.4        
+encapsulation dot1Q 4
+ip address 192.168.1.1 255.255.255.0
+interface FastEthernet0/0.6         
+encapsulation dot1Q 6
+ipv6 address 1ef0:111:11:1::1/64
+
+router ospf 1
+network 192.168.1.0 0.0.0.255 area 0
+network 11.0.0.0 0.0.0.3 area 0
+ipv6 router ospf 1
+router-id 1.1.1.1
+interface FastEthernet0/0.6   
+ipv6 ospf 1 area 0
+interface Serial0/0/1
+ipv6 ospf 1 area 0
+ 
+interface s0/0/0
+ip ospf authentication message-digest
+ip ospf  message-digest-key 1 md5 cisco
+interface s0/0/1
+ip ospf authentication message-digest
+ip ospf message-digest-key 1 md5 cisco
+ 
+ip access-list extended IPv4
+permit udp 192.168.3.0 0.0.0.255 host 192.168.1.2 eq 53
+permit tcp 192.168.3.0 0.0.0.255 host 192.168.1.3 eq 80
+permit icmp any 192.168.1.0 0.0.0.255 echo-reply
+interface fa0/0.4    
+ip access-group IPv4 out
+exit
+ipv6 access-list IPv6
+permit udp 1ef0:333:33:3::0/64 host 1ef0:111:11:1::2 eq 53
+permit tcp 1ef0:333:33:3::0/64 host 1ef0:111:11:1::3 eq 80
+permit icmp any 1ef0:111:11:1::0/64 echo-reply
+interface fa0/0.6
+ipv6 traffic-filter IPv6 out
+
+
+
+ISTANBUL SWITCH 
+
+Enable
+Configure terminal 
+Vlan 4
+Vlan 6
+interface rangeFastEthernet0/1 – 2
+switchport mode access
+switchport access vlan 4
+exit
+interface rangeFastEthernet0/3– 4
+switchport mode access
+switchport access vlan 6
+exit
+interface GigabitEthernet0/ 1
+switchport mode trunk
+exit
+
+interface range fa0/5-24
+shutdown
+interface g0/2
+shutdown
+interface fa0/1 
+switchport mode access
+switchport port-security maximum 1
+switchport port-security violation restrict
+switchport port-security mac-address 0001.96AD.A478
+interface fa0/2
+switchport mode access
+switchport port-security maximum 1
+switchport port-security violation restrict
+switchport port-security mac-address 00D0.FFB0.8606
+interface fa0/3
+switchport mode access
+switchport port-security maximum 1
+switchport port-security violation restrict
+switchport port-security mac-address 0007.EC4D.8B2D
+interface fa0/4
+switchport mode access
+switchport port-security maximum 1
+switchport port-security violation restrict
+switchport port-security mac-address 0002.4AE1.A133
+
+-----------
+
+IZMIR ROUTER 
+
+Enable 
+Configure terminal 
+ipv6 unicast-routing
+İnterface FastEthernet0/0
+ipv6 address 1ef0:333:33:3::1/64
+no shutdown
+interface Serial0/0/0
+ipv6 address 1ef0:abc:bc:c::2/126
+no shutdown
+
+ipv6 router ospf 1
+router-id 2.2.2.2
+interface FastEthernet0/0
+ipv6 ospf 1 area 0
+interface Serial0/0/0
+ipv6 ospf 1 area 0
+
+
+IZMIR SWİTCH
+
+Enable 
+Configure terminal 
+interface range fa0/3-24
+shutdown
+interface range g0/1-2
+shutdown
+interface fa0/2
+switchport mode access
+switchport port-security maximum 1
+switchport port-security violation restrict
+switchport port-security mac-address 000D.BD06.D042
+
+
