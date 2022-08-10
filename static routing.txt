@@ -129,7 +129,7 @@ ipv6 unicast-routing
 ipv6 address 1ef0:333:33:3::1/64
 no shutdown
 interface Serial0/0/0
-ipv6 address 1ef0:abc:bc:c::2 126
+ipv6 address 1ef0:abc:bc:c::2/126
 no shutdown
 
 ipv6 unicast-routing 
