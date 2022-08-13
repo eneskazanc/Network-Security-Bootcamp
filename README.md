@@ -1,5 +1,5 @@
 # Network Security Bootcamp Bitirme Projesi
-TechCareer Network Security Bitirme Projesi
+TechCareer Network Security Bootcamp Bitirme Projesi
 
 Proje 1- Static Routing
 
